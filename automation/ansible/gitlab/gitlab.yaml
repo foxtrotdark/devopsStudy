@@ -1,0 +1,30 @@
+---
+   name: Deploy Gitlab
+   hosts: gitlab_server
+   become: yes
+
+   tasks:
+    - name: Update package to latest
+      apt:
+        update_cache: true
+
+    - name: Install specific packages
+      apt:
+        name: {{ item }}
+        state: present
+        with_items:
+          - curl
+          - openssh-server
+          - ca-certificates
+          - perl
+          - tzdata
+
+    - name: Install postfix
+      apt:
+        name: postfix
+        state: present
+
+    - name: Install Gitlab
+      apt:
+        name: gitlab-ce=18.1.0-ce.0
+        state: present
